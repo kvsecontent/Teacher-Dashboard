@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - PM SHRI KENDRIYA VIDYALAYA RAEBARELI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #0056b3 0%, #00203e 100%);
+        }
+        
+        .login-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid var(--primary);
+            display: block;
+            object-fit: cover;
+        }
+        
+        .school-title {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        
+        .login-subtitle {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: var(--secondary);
+            text-align: center;
+        }
+        
+        .login-form {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+        }
+        
+        .login-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .login-button:hover {
+            background-color: #004494;
+        }
+        
+        .login-footer {
+            margin-top: 25px;
+            font-size: 13px;
+            color: var(--secondary);
+            text-align: center;
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 15px;
+            padding: 8px;
+            display: none;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        /* Dashboard Container - Initially Hidden */
+        .dashboard-container {
+            display: none;
+        }
+        
+        /* Calendar Styles */
+        .calendar {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day-header {
+            padding: 10px;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-auto-rows: minmax(100px, auto);
+        }
+        
+        .calendar-day {
+            border: 1px solid #ddd;
+            padding: 8px;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .calendar-day.other-month {
+            background-color: #f9f9f9;
+            color: #999;
+        }
+        
+        .calendar-day.today {
+            background-color: #e6f7ff;
+        }
+        
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .calendar-event {
+            margin-bottom: 4px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: white;
+        }
+        
+        .calendar-event.exam {
+            background-color: var(--danger);
+        }
+        
+        .calendar-event.holiday {
+            background-color: var(--success);
+        }
+        
+        .calendar-event.meeting {
+            background-color: var(--warning);
+            color: #333;
+        }
+        
+        .calendar-event.assignment {
+            background-color: var(--info);
+        }
+        
+        .calendar-event.other {
+            background-color: var(--secondary);
+        }
+        
+        /* Date Picker */
+        .date-picker {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        /* Timeline Styles for Syllabus Tracker */
+        .topic-timeline {
+            padding: 20px 0;
+        }
+        
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--light);
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-marker {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary);
+            border: 4px solid var(--light);
+            border-radius: 50%;
+            left: 15px;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .timeline-marker.active {
+            background-color: var(--primary);
+        }
+        
+        .timeline-content {
+            padding: 15px;
+            background-color: white;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-title {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .timeline-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .school-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .school-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        
+        .school-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .teacher-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .teacher-detail {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        /* Navigation */
+        .nav {
+            background-color: var(--dark);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .nav-container {
+            display: flex;
+        }
+        
+        .nav-item {
+            color: var(--light);
+            padding: 12px 20px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title .title-text {
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 8px;
+        }
+        
+        .refresh-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .refresh-btn i {
+            margin-right: 5px;
+        }
+        
+        /* Dashboard Grids */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .dashboard-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .card-info {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-top: 5px;
+        }
+        
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        
+        thead {
+            background-color: var(--primary);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Charts Container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            height: 300px;
+        }
+        
+        /* Student Cards */
+        .student-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .student-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .student-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .student-category {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .student-details {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .student-strengths, .student-weaknesses {
+            margin-top: 10px;
+        }
+        
+        .student-strengths h4, .student-weaknesses h4 {
+            font-size: 14px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .student-strengths ul, .student-weaknesses ul {
+            padding-left: 20px;
+            font-size: 13px;
+        }
+        
+        .bright {
+            border-left-color: var(--success);
+        }
+        
+        .bright .student-category {
+            background-color: var(--success);
+        }
+        
+        .late-bloomer {
+            border-left-color: var(--warning);
+        }
+        
+        .late-bloomer .student-category {
+            background-color: var(--warning);
+        }
+        
+        /* Workshop and Service Courses */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .course-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .course-details {
+            font-size: 14px;
+            color: var(--secondary);
+            flex: 1;
+        }
+        
+        .course-sessions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 5px 0;
+        }
+        
+        /* Achievements Section */
+        .achievements-list {
+            list-style-type: none;
+        }
+        
+        .achievement-item {
+            padding: 10px;
+            border-left: 3px solid var(--primary);
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .achievement-title {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .achievement-date {
+            font-size: 12px;
+            color: var(--secondary);
+        }
+        
+        .achievement-description {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        /* Discipline Reports */
+        .discipline-item {
+            padding: 10px;
+            border-left: 3px solid var(--danger);
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .discipline-date {
+            font-weight: bold;
+            color: var(--danger);
+        }
+        
+        .discipline-student {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .discipline-description {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-btn:hover {
+            color: black;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-title {
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        /* Loading Indicator */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Status Badges */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .school-name {
+                font-size: 18px;
+            }
+            
+            .school-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .nav-item {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .main-content {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+            }
+            
+            .dashboard-grid, .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="login-container">
+        <div class="login-box">
+            <img src="https://via.placeholder.com/100" alt="School Logo" class="login-logo" id="login-logo">
+            <h1 class="school-title">PM SHRI KENDRIYA VIDYALAYA RAEBARELI</h1>
+            <p class="login-subtitle">Teacher Dashboard Access</p>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="employee-id" class="form-label">Employee ID</label>
+                    <input type="text" id="employee-id" class="form-input" placeholder="Enter your Employee ID" required>
+                </div>
+
+    <script>
+        // Configuration - Replace with your actual API URL
+        const API_BASE_URL = 'https://your-render-api-url.onrender.com';
+        
+        // Login Validation
+        document.getElementById('login-button').addEventListener('click', validateLogin);
+        
+        // Allow pressing Enter key to submit login
+        document.getElementById('employee-id').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                validateLogin();
+            }
+        });
+        
+        function validateLogin() {
+            const employeeId = document.getElementById('employee-id').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (!employeeId) {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Please enter your Employee ID.';
+                return;
+            }
+            
+            // In a real implementation, you would validate against the API
+            // For demo purposes, we'll use a simple check
+            if (employeeId === 'KV12345' || employeeId === 'KV67890') {
+                // Authentication successful - proceed to dashboard
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('dashboard-container').style.display = 'block';
+                
+                // Load teacher data
+                loadTeacherData(employeeId);
+                
+                // Load dashboard data
+                loadDashboardData();
+            } else {
+                // Show error message
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Invalid Employee ID. Please try again.';
+            }
+        }
+        
+        // Function to authenticate with API (for real implementation)
+        function authenticateWithAPI(employeeId) {
+            fetch(`${API_BASE_URL}/api/auth`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    employeeId: employeeId
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Authentication failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Store authentication token if needed
+                localStorage.setItem('authToken', data.token);
+                
+                // Proceed to dashboard
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('dashboard-container').style.display = 'block';
+                
+                // Load teacher data
+                loadTeacherData(employeeId);
+                
+                // Load dashboard data
+                loadDashboardData();
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Invalid Employee ID. Please try again.';
+            });
+        }
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="button" id="login-button" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <p id="error-message" class="error-message">Invalid credentials. Please try again.</p>
+            </div>
+            
+            <div class="login-footer">
+                <p>&copy; 2025 PM SHRI Kendriya Vidyalaya Raebareli. All rights reserved.</p>
+                <p>Contact administrator for login issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container" id="dashboard-container">
+    <!-- Header Section -->
+    <header class="header">
+        <div class="school-info">
+            <img src="https://via.placeholder.com/80" alt="School Logo" class="school-logo" id="school-logo">
+            <h1 class="school-name">PM SHRI KENDRIYA VIDYALAYA RAEBARELI</h1>
+        </div>
+        <div class="teacher-info">
+            <div class="teacher-detail"><i class="fas fa-user"></i> <span id="teacher-name">Teacher Name</span></div>
+            <div class="teacher-detail"><i class="fas fa-id-card"></i> <span id="teacher-id">ID: KV12345</span></div>
+            <div class="teacher-detail"><i class="fas fa-book"></i> <span id="teacher-subject">Subject: Mathematics</span></div>
+            <div class="teacher-detail"><i class="fas fa-graduation-cap"></i> <span id="teacher-class">Class: X-A</span></div>
+        </div>
+    </header>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="school-info">
+            <img src="https://via.placeholder.com/80" alt="School Logo" class="school-logo" id="school-logo">
+            <h1 class="school-name">PM SHRI KENDRIYA VIDYALAYA RAEBARELI</h1>
+        </div>
+        <div class="teacher-info">
+            <div class="teacher-detail"><i class="fas fa-user"></i> <span id="teacher-name">Teacher Name</span></div>
+            <div class="teacher-detail"><i class="fas fa-id-card"></i> <span id="teacher-id">ID: KV12345</span></div>
+            <div class="teacher-detail"><i class="fas fa-book"></i> <span id="teacher-subject">Subject: Mathematics</span></div>
+            <div class="teacher-detail"><i class="fas fa-graduation-cap"></i> <span id="teacher-class">Class: X-A</span></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-item active" data-section="dashboard">Dashboard</div>
+            <div class="nav-item" data-section="enrollment">Class Enrollment</div>
+            <div class="nav-item" data-section="categories">Category Distribution</div>
+            <div class="nav-item" data-section="performance">Student Performance</div>
+            <div class="nav-item" data-section="attendance">Attendance</div>
+            <div class="nav-item" data-section="assessments">Assessments</div>
+            <div class="nav-item" data-section="syllabus">Syllabus Tracker</div>
+            <div class="nav-item" data-section="workshops">Workshops & Courses</div>
+            <div class="nav-item" data-section="discipline">Discipline Reports</div>
+            <div class="nav-item" data-section="achievements">Achievements</div>
+            <div class="nav-item" data-section="calendar">Calendar</div>
+            <div class="nav-item" data-section="communications">Parent Comms</div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section class="section" id="dashboard-section">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard Overview
+                </div>
+                <button class="refresh-btn" id="refresh-dashboard">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-title">Total Students</div>
+                    <div class="card-value" id="total-students">45</div>
+                    <div class="card-info">Class X-A</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title">Boys / Girls Ratio</div>
+                    <div class="card-value" id="gender-ratio">24 / 21</div>
+                    <div class="card-info">53% Boys, 47% Girls</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title">Bright Learners</div>
+                    <div class="card-value" id="bright-learners">15</div>
+                    <div class="card-info">33% of class</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title">Late Bloomers</div>
+                    <div class="card-value" id="late-bloomers">8</div>
+                    <div class="card-info">18% of class</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title">Completed Workshops</div>
+                    <div class="card-value" id="workshops-completed">12</div>
+                    <div class="card-info">This academic year</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title">Pending Reports</div>
+                    <div class="card-value" id="pending-reports">3</div>
+                    <div class="card-info">Needs attention</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 25px;">
+                <div class="title-text">
+                    <i class="fas fa-chart-pie"></i> Performance Analytics
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-container">
+                    <canvas id="gender-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="category-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performance-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Class Enrollment Section -->
+        <section class="section" id="enrollment-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-users"></i> Class Enrollment
+                </div>
+                <button class="refresh-btn" id="refresh-enrollment">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Student Name</th>
+                            <th>Gender</th>
+                            <th>Category</th>
+                            <th>Service Category</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enrollment-table-body">
+                        <!-- Enrollment data will be loaded here -->
+                        <tr>
+                            <td colspan="7">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Category Distribution Section -->
+        <section class="section" id="categories-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-pie-chart"></i> Category Distribution
+                </div>
+                <button class="refresh-btn" id="refresh-categories">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-container">
+                    <canvas id="caste-category-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="service-category-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 25px;">
+                <div class="title-text">
+                    <i class="fas fa-table"></i> Detailed Category Data
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Total Students</th>
+                            <th>Boys</th>
+                            <th>Girls</th>
+                            <th>Bright Learners</th>
+                            <th>Late Bloomers</th>
+                        </tr>
+                    </thead>
+                    <tbody id="category-table-body">
+                        <!-- Category data will be loaded here -->
+                        <tr>
+                            <td colspan="6">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Student Performance Section -->
+        <section class="section" id="performance-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-star"></i> Bright Learners
+                </div>
+                <button class="refresh-btn" id="refresh-performance">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="student-cards" id="bright-learners-container">
+                <!-- Bright learners will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 25px;">
+                <div class="title-text">
+                    <i class="fas fa-seedling"></i> Late Bloomers
+                </div>
+            </div>
+
+            <div class="student-cards" id="late-bloomers-container">
+                <!-- Late bloomers will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workshops and Courses Section -->
+        <section class="section" id="workshops-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-chalkboard-teacher"></i> Workshops
+                </div>
+                <button class="refresh-btn" id="refresh-workshops">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="courses-grid" id="workshops-container">
+                <!-- Workshops will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 25px;">
+                <div class="title-text">
+                    <i class="fas fa-book-open"></i> Service Courses
+                </div>
+            </div>
+
+            <div class="courses-grid" id="courses-container">
+                <!-- Service courses will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discipline Reports Section -->
+        <section class="section" id="discipline-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-exclamation-triangle"></i> Discipline Reports
+                </div>
+                <button class="refresh-btn" id="refresh-discipline">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div id="discipline-reports-container">
+                <!-- Discipline reports will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="section" id="achievements-section" style="display: none;">
+            <div class="section-title">
+                <div class="title-text">
+                    <i class="fas fa-trophy"></i> Student Achievements
+                </div>
+                <button class="refresh-btn" id="refresh-achievements">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div id="achievements-container">
+                <!-- Achievements will be loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Detail Modal -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Student Details</h2>
+            </div>
+            <div id="modal-body">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Replace with your actual API URL
+        const API_BASE_URL = 'https://your-render-api-url.onrender.com';
+        
+        // DOM Elements
+        const sections = {
+            dashboard: document.getElementById('dashboard-section'),
+            enrollment: document.getElementById('enrollment-section'),
+            categories: document.getElementById('categories-section'),
+            performance: document.getElementById('performance-section'),
+            attendance: document.getElementById('attendance-section'),
+            assessments: document.getElementById('assessments-section'),
+            syllabus: document.getElementById('syllabus-section'),
+            workshops: document.getElementById('workshops-section'),
+            discipline: document.getElementById('discipline-section'),
+            achievements: document.getElementById('achievements-section'),
+            calendar: document.getElementById('calendar-section'),
+            communications: document.getElementById('communications-section')
+        };
+        
+        const navItems = document.querySelectorAll('.nav-item');
+        const modal = document.getElementById('detail-modal');
+        const closeModal = document.getElementById('close-modal');
+        
+        // School Logo - Replace with actual logo URL
+        document.getElementById('school-logo').src = 'https://your-imgur-logo-url.jpg';
+        
+        // Navigation Functionality
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                navItems.forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all sections
+                Object.values(sections).forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show selected section
+                const sectionName = this.getAttribute('data-section');
+                sections[sectionName].style.display = 'block';
+                
+                // Load data for the section if needed
+                loadSectionData(sectionName);
+            });
+        });
+        
+        // Close Modal
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Refresh Buttons
+        document.getElementById('refresh-dashboard').addEventListener('click', () => loadSectionData('dashboard'));
+        document.getElementById('refresh-enrollment').addEventListener('click', () => loadSectionData('enrollment'));
+        document.getElementById('refresh-categories').addEventListener('click', () => loadSectionData('categories'));
+        document.getElementById('refresh-performance').addEventListener('click', () => loadSectionData('performance'));
+        document.getElementById('refresh-attendance').addEventListener('click', () => loadSectionData('attendance'));
+        document.getElementById('refresh-assessments').addEventListener('click', () => loadSectionData('assessments'));
+        document.getElementById('refresh-syllabus').addEventListener('click', () => loadSectionData('syllabus'));
+        document.getElementById('refresh-workshops').addEventListener('click', () => loadSectionData('workshops'));
+        document.getElementById('refresh-discipline').addEventListener('click', () => loadSectionData('discipline'));
+        document.getElementById('refresh-achievements').addEventListener('click', () => loadSectionData('achievements'));
+        document.getElementById('refresh-calendar').addEventListener('click', () => loadSectionData('calendar'));
+        document.getElementById('refresh-communications').addEventListener('click', () => loadSectionData('communications'));
+        
+        // Load Teacher Data
+        function loadTeacherData(employeeId = null) {
+            // If employeeId is provided, include it in the request
+            const apiUrl = employeeId ? 
+                `${API_BASE_URL}/api/teacher-data?id=${employeeId}` : 
+                `${API_BASE_URL}/api/teacher-data`;
+            
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('teacher-name').textContent = data.name;
+                    document.getElementById('teacher-id').textContent = `ID: ${data.id}`;
+                    document.getElementById('teacher-subject').textContent = `Subject: ${data.subject}`;
+                    document.getElementById('teacher-class').textContent = `Class: ${data.class}`;
+                })
+                .catch(error => {
+                    console.error('Error loading teacher data:', error);
+                    // Set default values in case of error
+                    document.getElementById('teacher-name').textContent = 'Teacher Name';
+                    document.getElementById('teacher-id').textContent = 'ID: KV12345';
+                    document.getElementById('teacher-subject').textContent = 'Subject: Mathematics';
+                    document.getElementById('teacher-class').textContent = 'Class: X-A';
+                });
+        }
+        
+        // Load Dashboard Data
+        function loadDashboardData() {
+            fetch(`${API_BASE_URL}/api/dashboard-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update dashboard cards
+                    document.getElementById('total-students').textContent = data.totalStudents;
+                    document.getElementById('gender-ratio').textContent = `${data.boys} / ${data.girls}`;
+                    document.getElementById('bright-learners').textContent = data.brightLearners;
+                    document.getElementById('late-bloomers').textContent = data.lateBoomers;
+                    document.getElementById('workshops-completed').textContent = data.workshopsCompleted;
+                    document.getElementById('pending-reports').textContent = data.pendingReports;
+                    
+                    // Create charts
+                    createGenderChart(data.boys, data.girls);
+                    createCategoryChart(data.categories);
+                    createPerformanceChart(data.performance);
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard data:', error);
+                    // Handle error case with sample data
+                    createGenderChart(24, 21);
+                    createCategoryChart([
+                        { category: 'General', count: 18 },
+                        { category: 'OBC', count: 15 },
+                        { category: 'SC', count: 7 },
+                        { category: 'ST', count: 3 },
+                        { category: 'Muslim', count: 2 }
+                    ]);
+                    createPerformanceChart([
+                        { name: 'Excellent', count: 15 },
+                        { name: 'Good', count: 22 },
+                        { name: 'Average', count: 5 },
+                        { name: 'Needs Improvement', count: 3 }
+                    ]);
+                });
+        }
+        
+        // Load Enrollment Data
+        function loadEnrollmentData() {
+            const tableBody = document.getElementById('enrollment-table-body');
+            tableBody.innerHTML = '<tr><td colspan="7"><div class="loading"><div class="spinner"></div></div></td></tr>';
+            
+            fetch(`${API_BASE_URL}/api/enrollment-data`)
+                .then(response => response.json())
+                .then(data => {
+                    let tableHTML = '';
+                    data.forEach(student => {
+                        let statusClass = '';
+                        if (student.status === 'Active') statusClass = 'badge-success';
+                        else if (student.status === 'On Leave') statusClass = 'badge-warning';
+                        else if (student.status === 'Transferred') statusClass = 'badge-danger';
+                        
+                        tableHTML += `
+                            <tr>
+                                <td>${student.rollNo}</td>
+                                <td>${student.name}</td>
+                                <td>${student.gender}</td>
+                                <td>${student.category}</td>
+                                <td>${student.serviceCategory}</td>
+                                <td>${student.contact}</td>
+                                <td><span class="badge ${statusClass}">${student.status}</span></td>
+                            </tr>
+                        `;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading enrollment data:', error);
+                    // Show error message
+                    tableBody.innerHTML = '<tr><td colspan="7">Failed to load enrollment data. Please try again.</td></tr>';
+                });
+        }
+        
+        // Load Categories Data
+        function loadCategoriesData() {
+            fetch(`${API_BASE_URL}/api/categories-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Create category charts
+                    createCasteDistributionChart(data.casteCategories);
+                    createServiceCategoryChart(data.serviceCategories);
+                    
+                    // Populate category table
+                    const tableBody = document.getElementById('category-table-body');
+                    let tableHTML = '';
+                    data.detailedCategories.forEach(category => {
+                        tableHTML += `
+                            <tr>
+                                <td>${category.name}</td>
+                                <td>${category.total}</td>
+                                <td>${category.boys}</td>
+                                <td>${category.girls}</td>
+                                <td>${category.brightLearners}</td>
+                                <td>${category.lateBoomers}</td>
+                            </tr>
+                        `;
+                    });
+                    tableBody.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading categories data:', error);
+                    // Handle error
+                    document.getElementById('category-table-body').innerHTML = 
+                        '<tr><td colspan="6">Failed to load category data. Please try again.</td></tr>';
+                });
+        }
+        
+        // Load Performance Data
+        function loadPerformanceData() {
+            fetch(`${API_BASE_URL}/api/performance-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Bright learners
+                    const brightContainer = document.getElementById('bright-learners-container');
+                    let brightHTML = '';
+                    data.brightLearners.forEach(student => {
+                        brightHTML += createStudentCard(student, 'bright');
+                    });
+                    brightContainer.innerHTML = brightHTML;
+                    
+                    // Late bloomers
+                    const lateContainer = document.getElementById('late-bloomers-container');
+                    let lateHTML = '';
+                    data.lateBoomers.forEach(student => {
+                        lateHTML += createStudentCard(student, 'late-bloomer');
+                    });
+                    lateContainer.innerHTML = lateHTML;
+                    
+                    // Add click events to view details
+                    document.querySelectorAll('.student-card').forEach(card => {
+                        card.addEventListener('click', function() {
+                            const studentId = this.getAttribute('data-id');
+                            showStudentDetails(studentId);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading performance data:', error);
+                    // Handle error
+                    document.getElementById('bright-learners-container').innerHTML = 
+                        '<p>Failed to load bright learners data. Please try again.</p>';
+                    document.getElementById('late-bloomers-container').innerHTML = 
+                        '<p>Failed to load late bloomers data. Please try again.</p>';
+                });
+        }
+        
+        // Create Student Card HTML
+        function createStudentCard(student, type) {
+            return `
+                <div class="student-card ${type}" data-id="${student.id}">
+                    <div class="student-header">
+                        <span class="student-name">${student.name}</span>
+                        <span class="student-category">${type === 'bright' ? 'Bright Learner' : 'Late Bloomer'}</span>
+                    </div>
+                    <div class="student-details">
+                        <p>Roll No: ${student.rollNo} | Class: ${student.class}</p>
+                        <p>Category: ${student.category} | Service: ${student.serviceCategory}</p>
+                        
+                        <div class="student-strengths">
+                            <h4>Strengths:</h4>
+                            <ul>
+                                ${student.strengths.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="student-weaknesses">
+                            <h4>Areas for Improvement:</h4>
+                            <ul>
+                                ${student.weaknesses.map(w => `<li>${w}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Show Student Details Modal
+        function showStudentDetails(studentId) {
+            fetch(`${API_BASE_URL}/api/student-details/${studentId}`)
+                .then(response => response.json())
+                .then(student => {
+                    document.getElementById('modal-title').textContent = `${student.name} - Details`;
+                    
+                    let modalContent = `
+                        <div class="student-details">
+                            <p><strong>Roll No:</strong> ${student.rollNo}</p>
+                            <p><strong>Class:</strong> ${student.class}</p>
+                            <p><strong>Gender:</strong> ${student.gender}</p>
+                            <p><strong>Category:</strong> ${student.category}</p>
+                            <p><strong>Service Category:</strong> ${student.serviceCategory}</p>
+                            <p><strong>Contact:</strong> ${student.contact}</p>
+                            
+                            <h3 style="margin-top: 15px;">Performance Report</h3>
+                            <p>${student.performanceReport}</p>
+                            
+                            <h3 style="margin-top: 15px;">Strengths</h3>
+                            <ul>
+                                ${student.strengths.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                            
+                            <h3 style="margin-top: 15px;">Areas for Improvement</h3>
+                            <ul>
+                                ${student.weaknesses.map(w => `<li>${w}</li>`).join('')}
+                            </ul>
+                            
+                            <h3 style="margin-top: 15px;">Suggestions</h3>
+                            <ul>
+                                ${student.suggestions.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                            
+                            <h3 style="margin-top: 15px;">Recent Achievements</h3>
+                            ${student.achievements.length > 0 ? 
+                                `<ul>${student.achievements.map(a => `<li>${a}</li>`).join('')}</ul>` : 
+                                '<p>No recent achievements recorded.</p>'
+                            }
+                            
+                            <h3 style="margin-top: 15px;">Discipline Records</h3>
+                            ${student.disciplineRecords.length > 0 ? 
+                                `<ul>${student.disciplineRecords.map(d => `<li>${d.date}: ${d.incident}</li>`).join('')}</ul>` : 
+                                '<p>No discipline issues recorded.</p>'
+                            }
+                        </div>
+                    `;
+                    
+                    document.getElementById('modal-body').innerHTML = modalContent;
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error loading student details:', error);
+                    document.getElementById('modal-title').textContent = 'Error';
+                    document.getElementById('modal-body').innerHTML = 
+                        '<p>Failed to load student details. Please try again.</p>';
+                    modal.style.display = 'block';
+                });
+        }
+        
+        // Load Workshops and Courses Data
+        function loadWorkshopsData() {
+            fetch(`${API_BASE_URL}/api/workshops-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Workshops
+                    const workshopsContainer = document.getElementById('workshops-container');
+                    let workshopsHTML = '';
+                    data.workshops.forEach(workshop => {
+                        workshopsHTML += createCourseCard(workshop);
+                    });
+                    workshopsContainer.innerHTML = workshopsHTML;
+                    
+                    // Service Courses
+                    const coursesContainer = document.getElementById('courses-container');
+                    let coursesHTML = '';
+                    data.serviceCourses.forEach(course => {
+                        coursesHTML += createCourseCard(course);
+                    });
+                    coursesContainer.innerHTML = coursesHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading workshops data:', error);
+                    // Handle error
+                    document.getElementById('workshops-container').innerHTML = 
+                        '<p>Failed to load workshops data. Please try again.</p>';
+                    document.getElementById('courses-container').innerHTML = 
+                        '<p>Failed to load service courses data. Please try again.</p>';
+                });
+        }
+        
+        // Create Course Card HTML
+        function createCourseCard(course) {
+            return `
+                <div class="course-card">
+                    <div class="course-title">${course.title}</div>
+                    <div class="course-details">
+                        <p><strong>Duration:</strong> ${course.duration}</p>
+                        <p><strong>Status:</strong> ${course.status}</p>
+                        <p><strong>Participants:</strong> ${course.participants}</p>
+                    </div>
+                    <div class="course-sessions">
+                        ${course.sessions.map(session => `
+                            <div class="session-item">
+                                <span>${session.date}</span>
+                                <span>${session.topic}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Load Discipline Data
+        function loadDisciplineData() {
+            fetch(`${API_BASE_URL}/api/discipline-data`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('discipline-reports-container');
+                    let html = '';
+                    
+                    data.forEach(report => {
+                        html += `
+                            <div class="discipline-item">
+                                <div class="discipline-date">${report.date}</div>
+                                <div class="discipline-student">${report.studentName} (${report.rollNo})</div>
+                                <div class="discipline-description">${report.description}</div>
+                                <div style="margin-top: 5px;">
+                                    <strong>Action Taken:</strong> ${report.actionTaken}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = html || '<p>No discipline reports found.</p>';
+                })
+                .catch(error => {
+                    console.error('Error loading discipline data:', error);
+                    document.getElementById('discipline-reports-container').innerHTML = 
+                        '<p>Failed to load discipline reports. Please try again.</p>';
+                });
+        }
+        
+        // Load Achievements Data
+        function loadAchievementsData() {
+            fetch(`${API_BASE_URL}/api/achievements-data`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('achievements-container');
+                    let html = '<ul class="achievements-list">';
+                    
+                    data.forEach(achievement => {
+                        html += `
+                            <li class="achievement-item">
+                                <div class="achievement-title">${achievement.title}</div>
+                                <div class="achievement-date">${achievement.date}</div>
+                                <div class="achievement-description">
+                                    <p><strong>Student:</strong> ${achievement.studentName}</p>
+                                    <p>${achievement.description}</p>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    
+                    html += '</ul>';
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error loading achievements data:', error);
+                    document.getElementById('achievements-container').innerHTML = 
+                        '<p>Failed to load achievements data. Please try again.</p>';
+                });
+        }
+        
+        // Load data for a specific section
+        function loadSectionData(section) {
+            switch(section) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'enrollment':
+                    loadEnrollmentData();
+                    break;
+                case 'categories':
+                    loadCategoriesData();
+                    break;
+                case 'performance':
+                    loadPerformanceData();
+                    break;
+                case 'attendance':
+                    loadAttendanceData();
+                    break;
+                case 'assessments':
+                    loadAssessmentsData();
+                    break;
+                case 'syllabus':
+                    loadSyllabusData();
+                    break;
+                case 'workshops':
+                    loadWorkshopsData();
+                    break;
+                case 'discipline':
+                    loadDisciplineData();
+                    break;
+                case 'achievements':
+                    loadAchievementsData();
+                    break;
+                case 'calendar':
+                    loadCalendarData();
+                    break;
+                case 'communications':
+                    loadCommunicationsData();
+                    break;
+            }
+        }
+        
+        // Attendance Data Loading
+        function loadAttendanceData() {
+            fetch(`${API_BASE_URL}/api/attendance-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update attendance stats
+                    document.getElementById('present-today').textContent = data.presentToday;
+                    document.getElementById('total-students-today').textContent = data.totalStudents;
+                    document.getElementById('weekly-attendance').textContent = data.weeklyAverage + '%';
+                    document.getElementById('attendance-concern').textContent = data.belowThreshold;
+                    
+                    // Create attendance charts
+                    createAttendanceTrendChart(data.attendanceTrend);
+                    createAttendanceComparisonChart(data.classComparison);
+                    
+                    // Populate attendance table
+                    const tableBody = document.getElementById('attendance-table-body');
+                    let tableHTML = '';
+                    
+                    data.students.forEach(student => {
+                        let statusClass = '';
+                        if (student.status === 'Present') statusClass = 'badge-success';
+                        else if (student.status === 'Absent') statusClass = 'badge-danger';
+                        else if (student.status === 'Late') statusClass = 'badge-warning';
+                        
+                        tableHTML += `
+                            <tr>
+                                <td>${student.rollNo}</td>
+                                <td>${student.name}</td>
+                                <td><span class="badge ${statusClass}">${student.status}</span></td>
+                                <td>${student.remarks || '-'}</td>
+                                <td>${student.totalPresent}/${student.totalDays}</td>
+                                <td>${student.percentage}%</td>
+                                <td>
+                                    <button class="refresh-btn" onclick="markAttendance('${student.rollNo}', 'Present')">P</button>
+                                    <button class="refresh-btn" style="background-color: var(--danger);" onclick="markAttendance('${student.rollNo}', 'Absent')">A</button>
+                                    <button class="refresh-btn" style="background-color: var(--warning);" onclick="markAttendance('${student.rollNo}', 'Late')">L</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableBody.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading attendance data:', error);
+                    // Handle error with sample data
+                    createAttendanceTrendChart([
+                        { date: '01/04', percentage: 95 },
+                        { date: '02/04', percentage: 92 },
+                        { date: '03/04', percentage: 88 },
+                        { date: '04/04', percentage: 90 },
+                        { date: '05/04', percentage: 93 },
+                        { date: '06/04', percentage: 94 },
+                        { date: '07/04', percentage: 91 }
+                    ]);
+                    
+                    createAttendanceComparisonChart([
+                        { class: 'X-A', percentage: 91 },
+                        { class: 'X-B', percentage: 89 },
+                        { class: 'X-C', percentage: 87 },
+                        { class: 'X-D', percentage: 92 }
+                    ]);
+                    
+                    document.getElementById('attendance-table-body').innerHTML = 
+                        '<tr><td colspan="7">Failed to load attendance data. Please try again.</td></tr>';
+                });
+        }
+        
+        // Assessments Data Loading
+        function loadAssessmentsData() {
+            fetch(`${API_BASE_URL}/api/assessments-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update assessment stats
+                    document.getElementById('next-assessment-date').textContent = data.nextAssessment.date;
+                    document.getElementById('next-assessment-name').textContent = data.nextAssessment.name;
+                    document.getElementById('class-average').textContent = data.lastAssessmentAverage + '%';
+                    document.getElementById('pending-grades').textContent = data.pendingGrades;
+                    
+                    // Create grade charts
+                    createGradeDistributionChart(data.gradeDistribution);
+                    createPerformanceTrendChart(data.performanceTrend);
+                    
+                    // Populate assessments table
+                    const tableBody = document.getElementById('assessment-table-body');
+                    let tableHTML = '';
+                    
+                    data.assessments.forEach(assessment => {
+                        let statusClass = '';
+                        if (assessment.status === 'Completed') statusClass = 'badge-success';
+                        else if (assessment.status === 'Scheduled') statusClass = 'badge-info';
+                        else if (assessment.status === 'In Progress') statusClass = 'badge-warning';
+                        
+                        tableHTML += `
+                            <tr>
+                                <td>${assessment.date}</td>
+                                <td>${assessment.title}</td>
+                                <td>${assessment.type}</td>
+                                <td>${assessment.maxScore}</td>
+                                <td>${assessment.average ? assessment.average + '%' : '-'}</td>
+                                <td><span class="badge ${statusClass}">${assessment.status}</span></td>
+                                <td>
+                                    <button class="refresh-btn" onclick="viewAssessment('${assessment.id}')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="refresh-btn" style="background-color: var(--warning);" onclick="editAssessment('${assessment.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableBody.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading assessments data:', error);
+                    // Handle error with sample data
+                    document.getElementById('assessment-table-body').innerHTML = 
+                        '<tr><td colspan="7">Failed to load assessment data. Please try again.</td></tr>';
+                });
+        }
+        
+        // Calendar Data Loading
+        function loadCalendarData() {
+            fetch(`${API_BASE_URL}/api/calendar-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Render calendar
+                    renderCalendar(data.calendarData);
+                    
+                    // Populate upcoming events
+                    const container = document.getElementById('upcoming-events');
+                    let html = '<ul class="achievements-list">';
+                    
+                    data.upcomingEvents.forEach(event => {
+                        let eventTypeClass = '';
+                        if (event.type === 'Exam') eventTypeClass = 'badge-danger';
+                        else if (event.type === 'Holiday') eventTypeClass = 'badge-success';
+                        else if (event.type === 'Meeting') eventTypeClass = 'badge-warning';
+                        else eventTypeClass = 'badge-info';
+                        
+                        html += `
+                            <li class="achievement-item">
+                                <div class="achievement-title">
+                                    ${event.title} 
+                                    <span class="badge ${eventTypeClass}" style="margin-left: 10px;">
+                                        ${event.type}
+                                    </span>
+                                </div>
+                                <div class="achievement-date">${event.date}, ${event.time || 'All Day'}</div>
+                                <div class="achievement-description">
+                                    <p>${event.description}</p>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    
+                    html += '</ul>';
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error loading calendar data:', error);
+                    document.getElementById('calendar-container').innerHTML = 
+                        '<p>Failed to load calendar data. Please try again.</p>';
+                    document.getElementById('upcoming-events').innerHTML = 
+                        '<p>Failed to load upcoming events. Please try again.</p>';
+                });
+        }
+        
+        // Parent Communication Data Loading
+        function loadCommunicationsData() {
+            fetch(`${API_BASE_URL}/api/communications-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update communication stats
+                    document.getElementById('parent-meetings').textContent = data.parentMeetings;
+                    document.getElementById('pending-responses').textContent = data.pendingResponses;
+                    document.getElementById('next-ptm').textContent = data.nextPTM.date;
+                    
+                    // Populate communication logs
+                    const logsBody = document.getElementById('communications-table-body');
+                    let logsHTML = '';
+                    
+                    data.communicationLogs.forEach(log => {
+                        let statusClass = '';
+                        if (log.status === 'Resolved') statusClass = 'badge-success';
+                        else if (log.status === 'Pending') statusClass = 'badge-warning';
+                        else if (log.status === 'No Response') statusClass = 'badge-danger';
+                        
+                        logsHTML += `
+                            <tr>
+                                <td>${log.date}</td>
+                                <td>${log.student}</td>
+                                <td>${log.parent}</td>
+                                <td>${log.type}</td>
+                                <td>${log.subject}</td>
+                                <td><span class="badge ${statusClass}">${log.status}</span></td>
+                                <td>
+                                    <button class="refresh-btn" onclick="viewCommunication('${log.id}')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="refresh-btn" style="background-color: var(--primary);" onclick="replyCommunication('${log.id}')">
+                                        <i class="fas fa-reply"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    logsBody.innerHTML = logsHTML;
+                    
+                    // Populate parent directory
+                    const directoryBody = document.getElementById('parent-directory-body');
+                    let directoryHTML = '';
+                    
+                    data.parentDirectory.forEach(parent => {
+                        directoryHTML += `
+                            <tr>
+                                <td>${parent.student}</td>
+                                <td>${parent.name}</td>
+                                <td>${parent.relation}</td>
+                                <td>${parent.phone}</td>
+                                <td>${parent.email}</td>
+                                <td>${parent.lastContact || 'Never'}</td>
+                                <td>
+                                    <button class="refresh-btn" onclick="contactParent('${parent.id}', 'call')">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="refresh-btn" style="background-color: var(--info);" onclick="contactParent('${parent.id}', 'email')">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    directoryBody.innerHTML = directoryHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading communications data:', error);
+                    document.getElementById('communications-table-body').innerHTML = 
+                        '<tr><td colspan="7">Failed to load communication logs. Please try again.</td></tr>';
+                    document.getElementById('parent-directory-body').innerHTML = 
+                        '<tr><td colspan="7">Failed to load parent directory. Please try again.</td></tr>';
+                });
+        }
+        
+        // Calendar Rendering Function
+        function renderCalendar(calendarData) {
+            const container = document.getElementById('calendar-container');
+            let calendarHTML = '<div class="calendar">';
+            
+            // Days header
+            calendarHTML += '<div class="calendar-header">';
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+            });
+            calendarHTML += '</div>';
+            
+            // Calendar grid
+            calendarHTML += '<div class="calendar-grid">';
+            
+            calendarData.forEach(week => {
+                week.forEach(day => {
+                    let dayClass = 'calendar-day';
+                    if (day.isCurrentMonth === false) dayClass += ' other-month';
+                    if (day.isToday) dayClass += ' today';
+                    
+                    calendarHTML += `<div class="${dayClass}">
+                        <div class="day-number">${day.date}</div>
+                        ${day.events.map(event => `
+                            <div class="calendar-event ${event.type.toLowerCase()}" 
+                                 title="${event.title}">
+                                ${event.title.length > 15 ? event.title.substring(0, 13) + '...' : event.title}
+                            </div>
+                        `).join('')}
+                    </div>`;
+                });
+            });
+            
+            calendarHTML += '</div></div>';
+            container.innerHTML = calendarHTML;
+            
+            // Add calendar navigation functionality
+            document.getElementById('prev-month').addEventListener('click', () => navigateCalendar('prev'));
+            document.getElementById('next-month').addEventListener('click', () => navigateCalendar('next'));
+        }
+        
+        // Calendar Navigation
+        function navigateCalendar(direction) {
+            // This would normally update the date and reload the calendar data
+            // For demo purposes, we'll just show a notification
+            alert(`Navigating ${direction} month. In a real implementation, this would load new calendar data.`);
+        }
+        
+        // Mark Attendance Function
+        function markAttendance(rollNo, status) {
+            alert(`Marking ${rollNo} as ${status}. In a real implementation, this would update the attendance data.`);
+        }
+        
+        // Assessment Functions
+        function viewAssessment(id) {
+            alert(`Viewing assessment ${id}. In a real implementation, this would show assessment details.`);
+        }
+        
+        function editAssessment(id) {
+            alert(`Editing assessment ${id}. In a real implementation, this would open an assessment editor.`);
+        }
+        
+        // Communication Functions
+        function viewCommunication(id) {
+            alert(`Viewing communication ${id}. In a real implementation, this would show communication details.`);
+        }
+        
+        function replyCommunication(id) {
+            alert(`Replying to communication ${id}. In a real implementation, this would open a reply form.`);
+        }
+        
+        function contactParent(id, method) {
+            alert(`Contacting parent ${id} via ${method}. In a real implementation, this would open the appropriate communication channel.`);
+        }
+        
+        // Create Attendance Charts
+        function createAttendanceTrendChart(data) {
+            const ctx = document.getElementById('attendance-trend-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(item => item.date),
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: data.map(item => item.percentage),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Weekly Attendance Trend'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 70,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createAttendanceComparisonChart(data) {
+            const ctx = document.getElementById('attendance-comparison-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.class),
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: data.map(item => item.percentage),
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Class Attendance Comparison'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 70,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Create Assessment Charts
+        function createGradeDistributionChart(data) {
+            const ctx = document.getElementById('grade-distribution-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.grade),
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: data.map(item => item.count),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(255, 205, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(54, 162, 235, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Grade Distribution (Last Assessment)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createPerformanceTrendChart(data) {
+            const ctx = document.getElementById('performance-trend-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(item => item.assessment),
+                    datasets: [{
+                        label: 'Class Average (%)',
+                        data: data.map(item => item.average),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Class Performance Trend'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Syllabus Data Loading
+        function loadSyllabusData() {
+            fetch(`${API_BASE_URL}/api/syllabus-data`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update syllabus stats
+                    document.getElementById('syllabus-completion').textContent = data.completionPercentage + '%';
+                    document.getElementById('units-completed').textContent = `${data.completedUnits}/${data.totalUnits}`;
+                    document.getElementById('time-remaining').textContent = data.remainingDays;
+                    
+                    // Create syllabus charts
+                    createSyllabusCompletionChart(data.unitCompletion);
+                    createTimeAllocationChart(data.timeAllocation);
+                    
+                    // Populate syllabus table
+                    const tableBody = document.getElementById('syllabus-table-body');
+                    let tableHTML = '';
+                    
+                    data.topics.forEach(topic => {
+                        let statusClass = '';
+                        if (topic.status === 'Completed') statusClass = 'badge-success';
+                        else if (topic.status === 'In Progress') statusClass = 'badge-warning';
+                        else if (topic.status === 'Pending') statusClass = 'badge-info';
+                        else if (topic.status === 'Delayed') statusClass = 'badge-danger';
+                        
+                        tableHTML += `
+                            <tr>
+                                <td>${topic.unit}</td>
+                                <td>${topic.name}</td>
+                                <td>${topic.expectedHours}</td>
+                                <td>${topic.timeSpent || '-'}</td>
+                                <td><span class="badge ${statusClass}">${topic.status}</span></td>
+                                <td>${topic.startDate || '-'}</td>
+                                <td>${topic.completionDate || '-'}</td>
+                                <td>
+                                    <button class="refresh-btn" onclick="updateTopicStatus('${topic.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="refresh-btn" style="background-color: var(--info);" onclick="viewTopicResources('${topic.id}')">
+                                        <i class="fas fa-file"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableBody.innerHTML = tableHTML;
+                    
+                    // Populate upcoming topics
+                    const upcomingContainer = document.getElementById('upcoming-topics-container');
+                    let timelineHTML = '';
+                    
+                    data.upcomingTopics.forEach((topic, index) => {
+                        timelineHTML += `
+                            <div class="timeline-item">
+                                <div class="timeline-marker ${index === 0 ? 'active' : ''}"></div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">${topic.name}</h3>
+                                    <p><strong>Unit:</strong> ${topic.unit}</p>
+                                    <p><strong>Planned Start:</strong> ${topic.plannedStart}</p>
+                                    <p><strong>Estimated Hours:</strong> ${topic.estimatedHours}</p>
+                                    <div class="timeline-actions">
+                                        <button class="refresh-btn btn-sm" onclick="startTopic('${topic.id}')">
+                                            <i class="fas fa-play"></i> Start
+                                        </button>
+                                        <button class="refresh-btn btn-sm" style="background-color: var(--info);" onclick="viewTopicResources('${topic.id}')">
+                                            <i class="fas fa-file"></i> Resources
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    upcomingContainer.innerHTML = timelineHTML;
+                })
+                .catch(error => {
+                    console.error('Error loading syllabus data:', error);
+                    // Handle error with sample data
+                    createSyllabusCompletionChart([
+                        { unit: 'Unit 1', percentage: 100 },
+                        { unit: 'Unit 2', percentage: 100 },
+                        { unit: 'Unit 3', percentage: 85 },
+                        { unit: 'Unit 4', percentage: 40 },
+                        { unit: 'Unit 5', percentage: 0 }
+                    ]);
+                    
+                    createTimeAllocationChart([
+                        { topic: 'Numbers', planned: 10, actual: 12 },
+                        { topic: 'Algebra', planned: 15, actual: 14 },
+                        { topic: 'Geometry', planned: 12, actual: 10 },
+                        { topic: 'Statistics', planned: 8, actual: 6 }
+                    ]);
+                    
+                    document.getElementById('syllabus-table-body').innerHTML = 
+                        '<tr><td colspan="8">Failed to load syllabus data. Please try again.</td></tr>';
+                    document.getElementById('upcoming-topics-container').innerHTML = 
+                        '<p>Failed to load upcoming topics. Please try again.</p>';
+                });
+        }
+        
+        // Syllabus Functions
+        function updateTopicStatus(topicId) {
+            alert(`Updating status for topic ${topicId}. In a real implementation, this would open a status update form.`);
+        }
+        
+        function viewTopicResources(topicId) {
+            alert(`Viewing resources for topic ${topicId}. In a real implementation, this would show teaching resources.`);
+        }
+        
+        function startTopic(topicId) {
+            alert(`Starting topic ${topicId}. In a real implementation, this would mark the topic as 'In Progress'.`);
+        }
+        
+        // Create Syllabus Charts
+        function createSyllabusCompletionChart(data) {
+            const ctx = document.getElementById('syllabus-completion-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.unit),
+                    datasets: [{
+                        label: 'Completion (%)',
+                        data: data.map(item => item.percentage),
+                        backgroundColor: data.map(item => {
+                            if (item.percentage === 100) return 'rgba(40, 167, 69, 0.6)';
+                            else if (item.percentage >= 75) return 'rgba(23, 162, 184, 0.6)';
+                            else if (item.percentage >= 50) return 'rgba(255, 193, 7, 0.6)';
+                            else return 'rgba(220, 53, 69, 0.6)';
+                        }),
+                        borderColor: data.map(item => {
+                            if (item.percentage === 100) return 'rgb(40, 167, 69)';
+                            else if (item.percentage >= 75) return 'rgb(23, 162, 184)';
+                            else if (item.percentage >= 50) return 'rgb(255, 193, 7)';
+                            else return 'rgb(220, 53, 69)';
+                        }),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Unit Completion Status'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createTimeAllocationChart(data) {
+            const ctx = document.getElementById('time-allocation-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.topic),
+                    datasets: [
+                        {
+                            label: 'Planned Hours',
+                            data: data.map(item => item.planned),
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Actual Hours',
+                            data: data.map(item => item.actual),
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Time Allocation by Topic'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hours'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Create Charts
+        function createGenderChart(boys, girls) {
+            const ctx = document.getElementById('gender-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Boys', 'Girls'],
+                    datasets: [{
+                        data: [boys, girls],
+                        backgroundColor: [
+                            '#36a2eb',
+                            '#ff6384'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Gender Distribution'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createCategoryChart(categories) {
+            const ctx = document.getElementById('category-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories.map(c => c.category),
+                    datasets: [{
+                        label: 'Students',
+                        data: categories.map(c => c.count),
+                        backgroundColor: [
+                            '#36a2eb',
+                            '#ff6384',
+                            '#ffcd56',
+                            '#4bc0c0',
+                            '#9966ff'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Category Distribution'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createPerformanceChart(performance) {
+            const ctx = document.getElementById('performance-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: performance.map(p => p.name),
+                    datasets: [{
+                        data: performance.map(p => p.count),
+                        backgroundColor: [
+                            '#4bc0c0',
+                            '#36a2eb',
+                            '#ffcd56',
+                            '#ff6384'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Performance Distribution'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createCasteDistributionChart(categories) {
+            const ctx = document.getElementById('caste-category-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: categories.map(c => c.name),
+                    datasets: [{
+                        data: categories.map(c => c.count),
+                        backgroundColor: [
+                            '#36a2eb',
+                            '#ff6384',
+                            '#ffcd56',
+                            '#4bc0c0',
+                            '#9966ff'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Caste Category Distribution'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createServiceCategoryChart(categories) {
+            const ctx = document.getElementById('service-category-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories.map(c => `Category ${c.category}`),
+                    datasets: [{
+                        label: 'Students',
+                        data: categories.map(c => c.count),
+                        backgroundColor: '#36a2eb',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Service Category Distribution'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize the dashboard
+        function initDashboard() {
+            loadTeacherData();
+            loadDashboardData();
+        }
+        
+        // Start the application
+        initDashboard();
+    </script>
+</body>
+</html>
