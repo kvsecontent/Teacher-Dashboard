@@ -146,167 +146,6 @@
             text-align: center;
         }
         
-        /* Calendar Styles */
-        .calendar {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .calendar-header {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-        }
-        
-        .calendar-day-header {
-            padding: 10px;
-            text-align: center;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            grid-auto-rows: minmax(100px, auto);
-        }
-        
-        .calendar-day {
-            border: 1px solid #ddd;
-            padding: 8px;
-            min-height: 100px;
-            position: relative;
-        }
-        
-        .calendar-day.other-month {
-            background-color: #f9f9f9;
-            color: #999;
-        }
-        
-        .calendar-day.today {
-            background-color: #e6f7ff;
-        }
-        
-        .day-number {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .calendar-event {
-            margin-bottom: 4px;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: white;
-        }
-        
-        .calendar-event.exam {
-            background-color: var(--danger);
-        }
-        
-        .calendar-event.holiday {
-            background-color: var(--success);
-        }
-        
-        .calendar-event.meeting {
-            background-color: var(--warning);
-            color: #333;
-        }
-        
-        .calendar-event.assignment {
-            background-color: var(--info);
-        }
-        
-        .calendar-event.other {
-            background-color: var(--secondary);
-        }
-        
-        /* Date Picker */
-        .date-picker {
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: inherit;
-        }
-        
-        /* Timeline Styles for Syllabus Tracker */
-        .topic-timeline {
-            padding: 20px 0;
-        }
-        
-        .timeline-container {
-            position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .timeline-container::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            background-color: var(--light);
-            top: 0;
-            bottom: 0;
-            left: 20px;
-            margin-left: -3px;
-        }
-        
-        .timeline-item {
-            padding: 10px 40px;
-            position: relative;
-            background-color: inherit;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        
-        .timeline-marker {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: var(--secondary);
-            border: 4px solid var(--light);
-            border-radius: 50%;
-            left: 15px;
-            top: 15px;
-            z-index: 1;
-        }
-        
-        .timeline-marker.active {
-            background-color: var(--primary);
-        }
-        
-        .timeline-content {
-            padding: 15px;
-            background-color: white;
-            position: relative;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .timeline-title {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 18px;
-        }
-        
-        .timeline-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-sm {
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-        
         /* Header Styles */
         .header {
             background-color: var(--primary);
@@ -317,6 +156,7 @@
             align-items: center;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         
         .school-info {
@@ -375,6 +215,55 @@
         
         .nav-item:hover, .nav-item.active {
             background-color: var(--primary);
+        }
+
+        /* Action buttons - GUARANTEED VISIBLE */
+        .action-bar {
+            background-color: #f0f0f0;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .button-logout {
+            background-color: #dc3545 !important;
+            color: white !important;
+            padding: 8px 15px !important;
+            border: none !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            font-weight: bold !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        .button-print {
+            background-color: #28a745 !important;
+            color: white !important;
+            padding: 8px 15px !important;
+            border: none !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            font-weight: bold !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
         }
         
         /* Main Content */
@@ -512,273 +401,14 @@
             height: 300px;
         }
         
-        /* Student Cards */
-        .student-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-        }
-        
-        .student-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Footer styles */
+        .footer {
+            text-align: center;
             padding: 15px;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .student-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .student-name {
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .student-category {
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            background-color: var(--info);
+            background-color: var(--dark);
             color: white;
-        }
-        
-        .student-details {
             font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        .student-strengths, .student-weaknesses {
-            margin-top: 10px;
-        }
-        
-        .student-strengths h4, .student-weaknesses h4 {
-            font-size: 14px;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-        
-        .student-strengths ul, .student-weaknesses ul {
-            padding-left: 20px;
-            font-size: 13px;
-        }
-        
-        .bright {
-            border-left-color: var(--success);
-        }
-        
-        .bright .student-category {
-            background-color: var(--success);
-        }
-        
-        .late-bloomer {
-            border-left-color: var(--warning);
-        }
-        
-        .late-bloomer .student-category {
-            background-color: var(--warning);
-        }
-        
-        /* Workshop and Service Courses */
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .course-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .course-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .course-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-        
-        .course-details {
-            font-size: 14px;
-            color: var(--secondary);
-            flex: 1;
-        }
-        
-        .course-sessions {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-        }
-        
-        .session-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            padding: 5px 0;
-        }
-        
-        /* Achievements Section */
-        .achievements-list {
-            list-style-type: none;
-        }
-        
-        .achievement-item {
-            padding: 10px;
-            border-left: 3px solid var(--primary);
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .achievement-title {
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        .achievement-date {
-            font-size: 12px;
-            color: var(--secondary);
-        }
-        
-        .achievement-description {
-            margin-top: 5px;
-            font-size: 14px;
-        }
-        
-        /* Discipline Reports */
-        .discipline-item {
-            padding: 10px;
-            border-left: 3px solid var(--danger);
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .discipline-date {
-            font-weight: bold;
-            color: var(--danger);
-        }
-        
-        .discipline-student {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .discipline-description {
-            margin-top: 5px;
-            font-size: 14px;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 700px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .close-btn:hover {
-            color: black;
-        }
-        
-        .modal-header {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .modal-title {
-            color: var(--primary);
-            font-size: 20px;
-        }
-        
-        /* Loading Indicator */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary);
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Status Badges */
-        .badge {
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .badge-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-warning {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .badge-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .badge-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
-        
-        /* Dashboard Container - Initially Hidden */
-        .dashboard-container {
-            display: none;
+            margin-top: 30px;
         }
         
         /* Responsive Adjustments */
@@ -817,9 +447,13 @@
                 grid-template-columns: 1fr;
             }
             
-            .modal-content {
-                width: 95%;
-                margin: 5% auto;
+            .action-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-title {
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -889,6 +523,19 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
+            <!-- Action Bar - DEFINITELY VISIBLE -->
+            <div class="action-bar">
+                <div class="action-title">Teacher Dashboard Controls:</div>
+                <div class="action-buttons">
+                    <button onclick="logout()" class="button-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <button onclick="printDashboard()" class="button-print">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
+
             <!-- Dashboard Section -->
             <section class="section" id="dashboard-section">
                 <div class="section-title">
@@ -995,21 +642,13 @@
                 </div>
             </section>
             
-            <!-- Add more sections here for Categories, Performance, etc. -->
+            <!-- Other sections would be here -->
         </main>
-    </div>
-
-    <!-- Detail Modal -->
-    <div class="modal" id="detail-modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Student Details</h2>
-            </div>
-            <div id="modal-body">
-                <!-- Modal content will be loaded here -->
-            </div>
-        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 PM SHRI KENDRIYA VIDYALAYA, RAEBARELI. All rights reserved.</p>
+        </footer>
     </div>
 
     <script>
@@ -1024,10 +663,8 @@
         };
         
         const navItems = document.querySelectorAll('.nav-item');
-        const modal = document.getElementById('detail-modal');
-        const closeModal = document.getElementById('close-modal');
         
-        // Login Validation - Simple version that will always work
+        // Login Validation
         function validateLogin() {
             const employeeId = document.getElementById('employee-id').value;
             const errorMessage = document.getElementById('error-message');
@@ -1056,6 +693,19 @@
                 errorMessage.style.display = 'block';
                 errorMessage.textContent = 'Invalid Employee ID. Please try again.';
             }
+        }
+        
+        // Logout function
+        function logout() {
+            document.getElementById('dashboard-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'flex';
+            document.getElementById('employee-id').value = '';
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Print Dashboard function
+        function printDashboard() {
+            window.print();
         }
         
         // Allow pressing Enter key to submit login
@@ -1092,20 +742,6 @@
                 // Load data for the section if needed
                 // loadSectionData(sectionName);
             });
-        });
-        
-        // Close Modal
-        if (closeModal) {
-            closeModal.addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
-        }
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
         });
         
         // Load Teacher Data
@@ -1274,19 +910,15 @@
             }
         }
         
-        // Check for hash in URL to potentially skip login
-        function checkHashForLogin() {
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Check for hash in URL to potentially skip login
             if (window.location.hash === '#dashboard') {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('dashboard-container').style.display = 'block';
                 loadTeacherData();
                 loadDashboardData();
             }
-        }
-        
-        // Initialize on page load
-        window.addEventListener('load', function() {
-            checkHashForLogin();
         });
     </script>
 </body>
